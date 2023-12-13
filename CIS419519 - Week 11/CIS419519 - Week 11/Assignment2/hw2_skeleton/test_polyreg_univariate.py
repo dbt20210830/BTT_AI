@@ -22,7 +22,7 @@ if __name__ == "__main__":
 
     # regression with degree = d
     d = 8
-    model = PolynomialRegression(degree = d, regLambda = 1.0, alpha=0.01, max_iter=1000)
+    model = PolynomialRegression(degree = d, regLambda = 0)
     model.fit(X, y)
     
     # output predictions
@@ -33,6 +33,7 @@ if __name__ == "__main__":
     plt.figure()
     plt.plot(X, y, 'rx')
     plt.title('PolyRegression with d = '+str(d))
+    plt.hold(True)
     plt.plot(xpoints, ypoints, 'b-')
     plt.xlabel('X')
     plt.ylabel('Y')

@@ -12,7 +12,7 @@ from polyreg import PolynomialRegression
 
 from sklearn.linear_model import Ridge
 from sklearn.preprocessing import PolynomialFeatures
-from sklearn.model_selection import LeaveOneOut
+from sklearn import cross_validation
 
 from polyreg import learningCurve
 
@@ -31,8 +31,10 @@ def plotLearningCurve(errorTrain, errorTest, regLambda, degree):
 
     xs = np.arange(len(errorTrain))
     plt.plot(xs, errorTrain, 'r-o')
+    plt.hold(True)
     plt.plot(xs, errorTest, 'b-o')
     plt.plot(xs, np.ones(len(xs)), 'k--')
+    plt.hold(False)
     plt.legend(['Training Error', 'Testing Error'], loc = 'best')
     plt.title('Learning Curve (d='+str(degree)+', lambda='+str(regLambda)+')')
     plt.xlabel('Training samples')
@@ -52,10 +54,9 @@ def generateLearningCurve(X, y, degree, regLambda):
     errorTrains = np.zeros((n, n-1));
     errorTests = np.zeros((n, n-1));
     
-    loo = LeaveOneOut()
-
+    loo = cross_validation.LeaveOneOut(n)
     itrial = 0
-    for train_index, test_index in loo.split(X):
+    for train_index, test_index in loo:
         #print("TRAIN indices:", train_index, "TEST indices:", test_index)
         X_train, X_test = X[train_index], X[test_index]
         y_train, y_test = y[train_index], y[test_index]
@@ -82,7 +83,7 @@ if __name__ == "__main__":
     '''
 
     # load the data
-    filePath = 'data/polydata.dat'
+    filePath = "data/polydata.dat"
     file = open(filePath,'r')
     allData = np.loadtxt(file, delimiter=',')
 
